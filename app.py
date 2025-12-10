@@ -266,37 +266,48 @@ init_db()
 
 st.set_page_config(page_title="Agenda FX 2025", layout="wide")
 st.title("📅 Agenda Fumigaciones Xterminio")
-# =========================
-# IMPORTAR / EXPORTAR BASE DE DATOS
-# =========================
-st.markdown("### 📦 Importar / Exportar base de datos")
+# ==== CSS PERSONALIZADO PARA SELECTBOX / MENÚ DESPLEGABLE ====
+st.markdown("""
+<style>
 
-col_imp, col_exp = st.columns(2)
+ /* Caja principal del select */
+div[data-baseweb="select"] > div {
+    background-color: #f0f0f0 !important;
+    border: 2px solid #4CAF50 !important;
+    border-radius: 6px !important;
+}
 
-# --- EXPORTAR BD ---
-with col_exp:
-    with open(DB_NAME, "rb") as f:
-        st.download_button(
-            label="⬇️ Exportar base de datos",
-            data=f,
-            file_name="agenda_exportada.db",
-            mime="application/octet-stream",
-        )
+/* === POPUP CUANDO SE DESPLIEGA === */
+div[data-baseweb="popover"] {
+    background-color: #ffffff !important;
+    border: 3px solid #1B8E3F !important;     /* Borde MÁS marcado */
+    border-radius: 10px !important;
 
-# --- IMPORTAR BD ---
-with col_imp:
-    archivo_subido = st.file_uploader(
-        "Subir nueva base de datos (.db)",
-        type=["db"],
-        accept_multiple_files=False
-    )
+    /* Sombra fuerte para que se note sobre el fondo */
+    box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.35) !important;
+}
 
-    if archivo_subido:
-        # Reemplazar archivo existente
-        with open(DB_NAME, "wb") as f:
-            f.write(archivo_subido.read())
-        st.success("✅ Base de datos importada correctamente. Recargando...")
-        st.rerun()
+/* Contenedor del menú */
+div[data-baseweb="menu"] ul {
+    background: #fafafa !important;
+    border: 2px solid #1B8E3F !important;      /* Borde más grueso */
+    border-radius: 8px !important;
+}
+
+/* Ítems de la lista */
+div[data-baseweb="menu-item"] {
+    padding: 10px !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Hover */
+div[data-baseweb="menu-item"]:hover {
+    background-color: #d9ffd9 !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 
 # Estado para ediciones
 if "cliente_edit_id" not in st.session_state:
@@ -825,3 +836,35 @@ else:
                         st.rerun()
                     else:
                         st.warning("Marca la casilla 'Confirmar eliminación de este cliente' para eliminar.")
+
+# =========================
+# IMPORTAR / EXPORTAR BASE DE DATOS
+# =========================
+st.markdown("### 📦 Importar / Exportar base de datos")
+
+col_imp, col_exp = st.columns(2)
+
+# --- EXPORTAR BD ---
+with col_exp:
+    with open(DB_NAME, "rb") as f:
+        st.download_button(
+            label="⬇️ Exportar base de datos",
+            data=f,
+            file_name="agenda_exportada.db",
+            mime="application/octet-stream",
+        )
+
+# --- IMPORTAR BD ---
+with col_imp:
+    archivo_subido = st.file_uploader(
+        "Subir nueva base de datos (.db)",
+        type=["db"],
+        accept_multiple_files=False
+    )
+
+    if archivo_subido:
+        # Reemplazar archivo existente
+        with open(DB_NAME, "wb") as f:
+            f.write(archivo_subido.read())
+        st.success("✅ Base de datos importada correctamente. Recargando...")
+        st.rerun()
