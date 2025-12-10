@@ -319,26 +319,6 @@ if sugerencias:
                             (c["business_name"] or c["name"] == seleccion) or
                             f"{c['business_name']} ({c['name']})" == seleccion),
                             None)
-# Construir lista filtrada
-opciones = ["-- Cliente nuevo --"]
-mapa_clientes = {}
-
-for c in clientes:
-    etiqueta = c["business_name"] or c["name"]
-    if c["business_name"] and c["name"]:
-        etiqueta = f"{c['business_name']} ({c['name']})"
-
-    # Filtrar por lo que el usuario escribe
-    if texto_busqueda in etiqueta.lower():
-        opciones.append(etiqueta)
-        mapa_clientes[etiqueta] = c
-
-# Selectbox con lista filtrada
-with col_sel:
-    seleccion = st.selectbox("Elegir cliente", opciones)
-
-cliente_sel = mapa_clientes.get(seleccion)
-
 with st.form("form_servicio_cliente", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
 
