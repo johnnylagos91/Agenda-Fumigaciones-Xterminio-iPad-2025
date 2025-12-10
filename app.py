@@ -266,37 +266,7 @@ init_db()
 
 st.set_page_config(page_title="Agenda FX 2025", layout="wide")
 st.title("📅 Agenda Fumigaciones Xterminio")
-# =========================
-# IMPORTAR / EXPORTAR BASE DE DATOS
-# =========================
-st.markdown("### 📦 Importar / Exportar base de datos")
 
-col_imp, col_exp = st.columns(2)
-
-# --- EXPORTAR BD ---
-with col_exp:
-    with open(DB_NAME, "rb") as f:
-        st.download_button(
-            label="⬇️ Exportar base de datos",
-            data=f,
-            file_name="agenda_exportada.db",
-            mime="application/octet-stream",
-        )
-
-# --- IMPORTAR BD ---
-with col_imp:
-    archivo_subido = st.file_uploader(
-        "Subir nueva base de datos (.db)",
-        type=["db"],
-        accept_multiple_files=False
-    )
-
-    if archivo_subido:
-        # Reemplazar archivo existente
-        with open(DB_NAME, "wb") as f:
-            f.write(archivo_subido.read())
-        st.success("✅ Base de datos importada correctamente. Recargando...")
-        st.rerun()
 
 # Estado para ediciones
 if "cliente_edit_id" not in st.session_state:
@@ -845,3 +815,35 @@ else:
                         st.rerun()
                     else:
                         st.warning("Marca la casilla 'Confirmar eliminación de este cliente' para eliminar.")
+
+# =========================
+# IMPORTAR / EXPORTAR BASE DE DATOS
+# =========================
+st.markdown("### 📦 Importar / Exportar base de datos")
+
+col_imp, col_exp = st.columns(2)
+
+# --- EXPORTAR BD ---
+with col_exp:
+    with open(DB_NAME, "rb") as f:
+        st.download_button(
+            label="⬇️ Exportar base de datos",
+            data=f,
+            file_name="agenda_exportada.db",
+            mime="application/octet-stream",
+        )
+
+# --- IMPORTAR BD ---
+with col_imp:
+    archivo_subido = st.file_uploader(
+        "Subir nueva base de datos (.db)",
+        type=["db"],
+        accept_multiple_files=False
+    )
+
+    if archivo_subido:
+        # Reemplazar archivo existente
+        with open(DB_NAME, "wb") as f:
+            f.write(archivo_subido.read())
+        st.success("✅ Base de datos importada correctamente. Recargando...")
+        st.rerun()
