@@ -323,18 +323,38 @@ clientes = get_clients()
 # =========================
 st.subheader("Nuevo servicio / Guardar cliente y agendar")
 
-# Lista de clientes guardados
+# ==============================
+# BUSCADOR RÁPIDO DE CLIENTES
+# ==============================
+st.subheader("Seleccionar o buscar cliente")
+
+col_sel, col_bus = st.columns([2, 2])
+
+# Campo de texto para búsqueda rápida
+with col_bus:
+    texto_busqueda = st.text_input(
+        "Buscar por nombre (rápido)",
+        placeholder="Escribe parte del nombre o negocio..."
+    ).strip().lower()
+
+# Construir lista filtrada
 opciones = ["-- Cliente nuevo --"]
 mapa_clientes = {}
+
 for c in clientes:
     etiqueta = c["business_name"] or c["name"]
     if c["business_name"] and c["name"]:
         etiqueta = f"{c['business_name']} ({c['name']})"
-    opciones.append(etiqueta)
-    mapa_clientes[etiqueta] = c
 
-# 🔍 Buscar cliente
-seleccion = st.selectbox("Buscar cliente", opciones)
+    # Filtrar por lo que el usuario escribe
+    if texto_busqueda in etiqueta.lower():
+        opciones.append(etiqueta)
+        mapa_clientes[etiqueta] = c
+
+# Selectbox con lista filtrada
+with col_sel:
+    seleccion = st.selectbox("Elegir cliente", opciones)
+
 cliente_sel = mapa_clientes.get(seleccion)
 
 with st.form("form_servicio_cliente", clear_on_submit=True):
