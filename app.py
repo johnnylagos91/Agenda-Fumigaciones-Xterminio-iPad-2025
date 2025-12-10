@@ -266,7 +266,37 @@ init_db()
 
 st.set_page_config(page_title="Agenda FX 2025", layout="wide")
 st.title("📅 Agenda Fumigaciones Xterminio")
+# =========================
+# IMPORTAR / EXPORTAR BASE DE DATOS
+# =========================
+st.markdown("### 📦 Importar / Exportar base de datos")
 
+col_imp, col_exp = st.columns(2)
+
+# --- EXPORTAR BD ---
+with col_exp:
+    with open(DB_NAME, "rb") as f:
+        st.download_button(
+            label="⬇️ Exportar base de datos",
+            data=f,
+            file_name="agenda_exportada.db",
+            mime="application/octet-stream",
+        )
+
+# --- IMPORTAR BD ---
+with col_imp:
+    archivo_subido = st.file_uploader(
+        "Subir nueva base de datos (.db)",
+        type=["db"],
+        accept_multiple_files=False
+    )
+
+    if archivo_subido:
+        # Reemplazar archivo existente
+        with open(DB_NAME, "wb") as f:
+            f.write(archivo_subido.read())
+        st.success("✅ Base de datos importada correctamente. Recargando...")
+        st.rerun()
 
 # Estado para ediciones
 if "cliente_edit_id" not in st.session_state:
@@ -293,32 +323,20 @@ clientes = get_clients()
 # =========================
 st.subheader("Nuevo servicio / Guardar cliente y agendar")
 
-# =========================
-# BUSCADOR AUTOMÁTICO DE CLIENTES
-# =========================
-
-# Crear lista con textos de clientes
-lista_clientes = []
+# Lista de clientes guardados
+opciones = ["-- Cliente nuevo --"]
+mapa_clientes = {}
 for c in clientes:
     etiqueta = c["business_name"] or c["name"]
     if c["business_name"] and c["name"]:
         etiqueta = f"{c['business_name']} ({c['name']})"
-    lista_clientes.append(etiqueta)
+    opciones.append(etiqueta)
+    mapa_clientes[etiqueta] = c
 
-# Campo de búsqueda con autocompletado
-texto_busqueda = st.text_input("🔎 Buscar o escribir cliente", "")
+# 🔍 Buscar cliente
+seleccion = st.selectbox("Buscar cliente", opciones)
+cliente_sel = mapa_clientes.get(seleccion)
 
-# Sugerencias dinámicas
-sugerencias = [x for x in lista_clientes if texto_busqueda.lower() in x.lower()] if texto_busqueda else []
-
-cliente_sel = None
-if sugerencias:
-    seleccion = st.selectbox("Coincidencias encontradas", sugerencias)
-    if seleccion:
-        cliente_sel = next((c for c in clientes if
-                            (c["business_name"] or c["name"] == seleccion) or
-                            f"{c['business_name']} ({c['name']})" == seleccion),
-                            None)
 with st.form("form_servicio_cliente", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
 
@@ -807,35 +825,3 @@ else:
                         st.rerun()
                     else:
                         st.warning("Marca la casilla 'Confirmar eliminación de este cliente' para eliminar.")
-
-# =========================
-# IMPORTAR / EXPORTAR BASE DE DATOS
-# =========================
-st.markdown("### 📦 Importar / Exportar base de datos")
-
-col_imp, col_exp = st.columns(2)
-
-# --- EXPORTAR BD ---
-with col_exp:
-    with open(DB_NAME, "rb") as f:
-        st.download_button(
-            label="⬇️ Exportar base de datos",
-            data=f,
-            file_name="agenda_exportada.db",
-            mime="application/octet-stream",
-        )
-
-# --- IMPORTAR BD ---
-with col_imp:
-    archivo_subido = st.file_uploader(
-        "Subir nueva base de datos (.db)",
-        type=["db"],
-        accept_multiple_files=False
-    )
-
-    if archivo_subido:
-        # Reemplazar archivo existente
-        with open(DB_NAME, "wb") as f:
-            f.write(archivo_subido.read())
-        st.success("✅ Base de datos importada correctamente. Recargando...")
-        st.rerun()
