@@ -300,31 +300,7 @@ if resultados:
         opciones.append(etiqueta)
         mapa_resultados[etiqueta] = c
 
-    # --- BUSCAR CLIENTE POR TEXTO ---
-st.markdown("### 🔍 Buscar cliente")
-
-busqueda_nombre = st.text_input("Escribe el nombre del cliente para buscar:")
-
-coincidencias = []
-if st.button("Buscar cliente"):
-    busqueda_lower = busqueda_nombre.lower().strip()
-    for c in clientes:
-        etiqueta = c["business_name"] or c["name"]
-        if c["business_name"] and c["name"]:
-            etiqueta = f"{c['business_name']} ({c['name']})"
-
-        if busqueda_lower in etiqueta.lower():
-            coincidencias.append((etiqueta, c))
-
-# Mostrar resultados
-cliente_sel = None
-if coincidencias:
-    opciones_lista = [item[0] for item in coincidencias]
-    seleccion_cliente = st.selectbox("Coincidencias encontradas:", opciones_lista)
-    cliente_sel = next(c for etiqueta, c in coincidencias if etiqueta == seleccion_cliente)
-elif busqueda_nombre:
-    st.info("No se encontraron coincidencias.")
-    cliente_sel = mapa_resultados.get(seleccion)
+   seleccion = st.selectbox("Buscar cliente", opciones)
 
 # ==== CSS PERSONALIZADO PARA EL SELECTBOX ====
 st.markdown("""
