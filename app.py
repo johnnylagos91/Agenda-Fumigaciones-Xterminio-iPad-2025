@@ -325,8 +325,6 @@ if coincidencias:
 elif busqueda_nombre:
     st.info("No se encontraron coincidencias.")
     cliente_sel = mapa_resultados.get(seleccion)
-else:
-    cliente_sel = None
 
 # ==== CSS PERSONALIZADO PARA EL SELECTBOX ====
 st.markdown("""
