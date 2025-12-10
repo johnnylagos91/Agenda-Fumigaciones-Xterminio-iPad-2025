@@ -293,20 +293,32 @@ clientes = get_clients()
 # =========================
 st.subheader("Nuevo servicio / Guardar cliente y agendar")
 
-# ==============================
-# BUSCADOR RÁPIDO DE CLIENTES
-# ==============================
-st.subheader("Seleccionar o buscar cliente")
+# =========================
+# BUSCADOR AUTOMÁTICO DE CLIENTES
+# =========================
 
-col_sel, col_bus = st.columns([2, 2])
+# Crear lista con textos de clientes
+lista_clientes = []
+for c in clientes:
+    etiqueta = c["business_name"] or c["name"]
+    if c["business_name"] and c["name"]:
+        etiqueta = f"{c['business_name']} ({c['name']})"
+    lista_clientes.append(etiqueta)
 
-# Campo de texto para búsqueda rápida
-with col_bus:
-    texto_busqueda = st.text_input(
-        "Buscar por nombre (rápido)",
-        placeholder="Escribe parte del nombre o negocio..."
-    ).strip().lower()
+# Campo de búsqueda con autocompletado
+texto_busqueda = st.text_input("🔎 Buscar o escribir cliente", "")
 
+# Sugerencias dinámicas
+sugerencias = [x for x in lista_clientes if texto_busqueda.lower() in x.lower()] if texto_busqueda else []
+
+cliente_sel = None
+if sugerencias:
+    seleccion = st.selectbox("Coincidencias encontradas", sugerencias)
+    if seleccion:
+        cliente_sel = next((c for c in clientes if
+                            (c["business_name"] or c["name"] == seleccion) or
+                            f"{c['business_name']} ({c['name']})" == seleccion),
+                            None)
 # Construir lista filtrada
 opciones = ["-- Cliente nuevo --"]
 mapa_clientes = {}
