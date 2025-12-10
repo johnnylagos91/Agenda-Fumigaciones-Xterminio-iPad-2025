@@ -267,41 +267,6 @@ init_db()
 st.set_page_config(page_title="Agenda FX 2025", layout="wide")
 st.title("📅 Agenda Fumigaciones Xterminio")
 
-st.subheader("Buscar cliente")
-
-buscar_texto = st.text_input("Escribe el nombre del cliente:")
-btn_buscar = st.button("Buscar")
-
-clientes = get_clients()
-
-resultados = []
-
-if btn_buscar:
-    texto = buscar_texto.lower().strip()
-    resultados = [
-        c for c in clientes
-        if texto in (c["name"] or "").lower()
-        or texto in (c["business_name"] or "").lower()
-    ]
-
-    if not resultados:
-        st.warning("No se encontraron clientes con ese nombre.")
-    else:
-        st.success(f"{len(resultados)} cliente(s) encontrado(s).")
-
-# Si hay resultados, los mostramos en un selectbox
-if resultados:
-    opciones = []
-    mapa_resultados = {}
-    for c in resultados:
-        etiqueta = c["business_name"] or c["name"]
-        if c["business_name"] and c["name"]:
-            etiqueta = f"{c['business_name']} ({c['name']})"
-        opciones.append(etiqueta)
-        mapa_resultados[etiqueta] = c
-
-   seleccion = st.selectbox("Buscar cliente", opciones)
-
 # ==== CSS PERSONALIZADO PARA EL SELECTBOX ====
 st.markdown("""
 <style>
