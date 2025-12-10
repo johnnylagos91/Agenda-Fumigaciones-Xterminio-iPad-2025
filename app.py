@@ -279,7 +279,7 @@ div[data-baseweb="select"] > div {
 
 /* === POPUP CUANDO SE DESPLIEGA === */
 div[data-baseweb="popover"] {
-    background-color: #ffffff !important;
+    background-color: #000000 !important;
     border: 3px solid #1B8E3F !important;     /* Borde MÁS marcado */
     border-radius: 10px !important;
 
