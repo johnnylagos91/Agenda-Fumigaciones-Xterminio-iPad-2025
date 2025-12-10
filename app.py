@@ -266,43 +266,39 @@ init_db()
 
 st.set_page_config(page_title="Agenda FX 2025", layout="wide")
 st.title("📅 Agenda Fumigaciones Xterminio")
-# ==== CSS PERSONALIZADO PARA SELECTBOX / MENÚ DESPLEGABLE ====
+# ==== CSS PERSONALIZADO PARA EL SELECTBOX ====
 st.markdown("""
 <style>
 
- /* Caja principal del select */
 div[data-baseweb="select"] > div {
-    background-color: #f0f0f0 !important;
-    border: 2px solid #4CAF50 !important;
+    background-color: #000000 !important;     /* Fondo negro */
+    border: 2px solid #4CAF50 !important;     /* Borde verde marcado */
     border-radius: 6px !important;
+    color: white !important;                  /* Texto blanco para que se vea */
 }
 
-/* === POPUP CUANDO SE DESPLIEGA === */
 div[data-baseweb="popover"] {
-    background-color: #000000 !important;
-    border: 3px solid #1B8E3F !important;     /* Borde MÁS marcado */
-    border-radius: 10px !important;
-
-    /* Sombra fuerte para que se note sobre el fondo */
-    box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.35) !important;
+    background-color: #000000 !important;     /* Fondo del menú negro */
+    border: 2px solid #4CAF50 !important;     /* Marca la cuadrícula */
+    border-radius: 8px !important;
+    color: white !important;
 }
 
-/* Contenedor del menú */
 div[data-baseweb="menu"] ul {
-    background: #fafafa !important;
-    border: 2px solid #1B8E3F !important;      /* Borde más grueso */
+    background: #000000 !important;           /* Fondo de la lista negro */
+    border: 1px solid #4CAF50 !important;
     border-radius: 8px !important;
 }
 
-/* Ítems de la lista */
 div[data-baseweb="menu-item"] {
     padding: 10px !important;
-    border-bottom: 1px solid #e0e0e0 !important;
+    border-bottom: 1px solid #333333 !important;  /* Línea separadora gris */
+    color: white !important;
 }
 
-/* Hover */
+/* Highlight al pasar el mouse */
 div[data-baseweb="menu-item"]:hover {
-    background-color: #d9ffd9 !important;
+    background-color: #333333 !important;     /* Gris oscuro al pasar el mouse */
 }
 
 </style>
