@@ -326,6 +326,76 @@ dia_hoy = hoy.day
 # =========================
 clientes = get_clients()
 
+# =============================
+#  AUTOCOMPLETADO DE CLIENTES
+# =============================
+
+st.subheader("Buscar cliente existente")
+
+# Caja de texto donde el usuario escribe para buscar
+busqueda = st.text_input("Escribe el nombre del cliente:")
+
+clientes = get_all_clients()   # obtienes todos los clientes de la BD
+nombres = [f"{c['name']} ({c['business_name']})" if c["business_name"] else c["name"] for c in clientes]
+
+# Filtrar sugerencias
+if busqueda.strip():
+    sugerencias = [n for n in nombres if busqueda.lower() in n.lower()]
+else:
+    sugerencias = []
+
+# Mostrar sugerencias
+cliente_seleccionado = None
+
+if sugerencias:
+    cliente_seleccionado = st.selectbox(
+        "Coincidencias encontradas:",
+        options=sugerencias,
+        index=None,
+        placeholder="Selecciona un cliente…"
+    )
+
+# Cuando se elige uno → llenar automáticamente el formulario
+cliente_datos = None
+if cliente_seleccionado:
+    nombre_puro = cliente_seleccionado.split(" (")[0]
+    for c in clientes:
+        if c["name"] == nombre_puro:
+            cliente_datos = c
+            break
+
+
+# =============================
+#  FORMULARIO QUE SE LLENA SOLO
+# =============================
+
+st.subheader("Datos del servicio")
+
+nombre = st.text_input(
+    "Nombre del cliente",
+    value=cliente_datos["name"] if cliente_datos else ""
+)
+
+business = st.text_input(
+    "Negocio",
+    value=cliente_datos["business_name"] if cliente_datos else ""
+)
+
+telefono = st.text_input(
+    "Teléfono",
+    value=cliente_datos["phone"] if cliente_datos else ""
+)
+
+direccion = st.text_input(
+    "Dirección",
+    value=cliente_datos["address"] if cliente_datos else ""
+)
+
+zona = st.text_input(
+    "Zona",
+    value=cliente_datos["zone"] if cliente_datos else ""
+)
+
 # =========================
 # FORMULARIO CLIENTE + SERVICIO
 # =========================
