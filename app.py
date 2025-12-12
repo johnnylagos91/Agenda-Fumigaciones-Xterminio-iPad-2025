@@ -342,53 +342,37 @@ for c in clientes:
     mapa_clientes[etiqueta] = c
 
 # =========================
-# BUSCADOR DE CLIENTES (AUTOCOMPLETADO REAL)
+# BUSCADOR DE CLIENTES
 # =========================
 
-st.markdown("### 🔍 Buscar cliente")
+texto_busqueda = st.text_input(
+    "Buscar cliente",
+    placeholder="Escribe el nombre: Juan, Jardines, Joyería..."
+)
 
-# Lista de nombres
-lista_nombres = []
-mapa_busqueda = {}
+# Construcción de lista normal
+opciones_completas = []
+mapa_clientes = {}
 
 for c in clientes:
     etiqueta = c["business_name"] or c["name"]
     if c["business_name"] and c["name"]:
         etiqueta = f"{c['business_name']} ({c['name']})"
-    lista_nombres.append(etiqueta)
-    mapa_busqueda[etiqueta] = c
+    opciones_completas.append(etiqueta)
+    mapa_clientes[etiqueta] = c
 
-# Caja de texto para escribir
-texto_busqueda = st.text_input(
-    "Escribe el nombre o negocio",
-    placeholder="Ej: Juan, José, Jardines…"
-)
-
-# Filtro que SOLO muestra lo que EMPIEZA con lo escrito
-sugerencias = []
+# Si hay texto → filtramos solo los que EMPIECEN con eso
 if texto_busqueda.strip():
-    sugerencias = [
-        nombre for nombre in lista_nombres
-        if nombre.lower().startswith(texto_busqueda.lower())
+    opciones = ["-- Cliente nuevo --"] + [
+        o for o in opciones_completas
+        if o.lower().startswith(texto_busqueda.lower())
     ]
-
-# --- Mostrar sugerencias como botones clickeables ---
-cliente_sel = None
-
-if sugerencias:
-    st.write("### Coincidencias")
-
-    for sugerencia in sugerencias:
-        if st.button(sugerencia):
-            cliente_sel = mapa_busqueda[sugerencia]
-            st.session_state["cliente_seleccionado"] = sugerencia
-            st.rerun()
-
-# Recuperar selección previa
-if "cliente_seleccionado" in st.session_state:
-    cliente_sel = mapa_busqueda.get(st.session_state["cliente_seleccionado"])
 else:
-    cliente_sel = None
+    opciones = ["-- Cliente nuevo --"] + opciones_completas
+
+# Selectbox final (ya filtrado)
+seleccion = st.selectbox("Coincidencias", opciones)
+cliente_sel = mapa_clientes.get(seleccion)
 
 with st.form("form_servicio_cliente", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
