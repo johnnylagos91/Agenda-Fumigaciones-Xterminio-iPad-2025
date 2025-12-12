@@ -342,7 +342,7 @@ for c in clientes:
     mapa_clientes[etiqueta] = c
 
 # =========================
-# BUSCADOR DE CLIENTES (AUTOCOMPLETADO)
+# BUSCADOR DE CLIENTES (AUTOCOMPLETADO POR INICIO)
 # =========================
 
 st.markdown("### 🔍 Buscar cliente")
@@ -358,31 +358,35 @@ for c in clientes:
     lista_nombres.append(etiqueta)
     mapa_busqueda[etiqueta] = c
 
-# Caja de texto para escribir
+# Caja de texto donde el usuario escribe
 texto_busqueda = st.text_input(
     "Escribe el nombre o negocio",
-    placeholder="Ej: Oxxo, Juan Pérez, Ferretería López…"
+    placeholder="Ej: Juan, Joyería, Jardines Spa…"
 )
 
-# Mostrar sugerencias dinámicas
+# Sugerencias que empiezan con lo escrito
 sugerencias = []
 if texto_busqueda.strip():
     sugerencias = [
-        nombre for nombre in lista_nombres 
-        if texto_busqueda.lower() in nombre.lower()
+        nombre for nombre in lista_nombres
+        if nombre.lower().startswith(texto_busqueda.lower())
     ]
 
-# Selector SOLO si hay sugerencias
+# Selector si hay sugerencias
 cliente_sel = None
 if sugerencias:
     seleccion = st.selectbox(
         "Coincidencias encontradas",
-        opciones := ["-- Selecciona cliente --"] + sugerencias,
+        ["-- Selecciona cliente --"] + sugerencias,
         key="selector_autocomplete"
     )
 
     if seleccion != "-- Selecciona cliente --":
         cliente_sel = mapa_busqueda.get(seleccion)
+
+else:
+    seleccion = "-- Cliente nuevo --"
+    cliente_sel = None
 else:
     seleccion = "-- Cliente nuevo --"
     cliente_sel = None
