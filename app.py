@@ -768,7 +768,7 @@ else:
                 etiqueta = f"{c['business_name']} ({c['name']})"
             opciones_nombres.append(etiqueta)
             etiqueta_a_cliente[etiqueta] = c
-            # 🔎 Buscador adicional por nombre del cliente (autocompletado)
+# 🔎 Buscador adicional por nombre del cliente (autocompletado)
 texto_buscar_cliente = st.text_input(
     "Buscar cliente por nombre",
     placeholder="Escribe aquí para filtrar clientes...",
