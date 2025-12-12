@@ -570,12 +570,12 @@ with st.expander("📅 Servicios agendados", expanded=False):
         col_bs1, col_bs2, col_bs3 = st.columns([2, 2, 1])
 
     with col_bs1:
-    opciones_ids_serv = ["--"] + [str(r["id"]) for r in rows]
-    servicio_id_sel = st.selectbox("Buscar por ID de servicio", opciones_ids_serv)
+        opciones_ids_serv = ["--"] + [str(r["id"]) for r in rows]
+        servicio_id_sel = st.selectbox("Buscar por ID de servicio", opciones_ids_serv)
 
     with col_bs2:
-    # 👉 Cajita de búsqueda
-    buscar_servicio_nombre = st.text_input(
+        # 👉 Cajita de búsqueda
+        buscar_servicio_nombre = st.text_input(
         "Buscar servicio por nombre",
         placeholder="Escribe: Juan, Jardines, Joyería...",
         key="buscar_serv_nombre"
