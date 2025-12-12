@@ -794,7 +794,7 @@ if texto_buscar_cliente.strip():
     ]
 else:
     opciones_nombres = ["--"] + opciones_nombres_completas
-        cliente_nombre_sel = st.selectbox("Buscar por nombre / negocio", opciones_nombres)
+    cliente_nombre_sel = st.selectbox("Buscar por nombre / negocio", opciones_nombres)
 
     with col_c3:
         buscar_cliente_btn = st.button("🔍 Buscar cliente")
