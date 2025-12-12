@@ -574,7 +574,6 @@ with st.expander("📅 Servicios agendados", expanded=False):
             servicio_id_sel = st.selectbox("Buscar por ID de servicio", opciones_ids_serv)
 
         with col_bs2:
-
     # 👉 Cajita nueva para escribir y filtrar por nombre
     buscar_servicio_nombre = st.text_input(
         "Buscar servicio por nombre",
