@@ -317,8 +317,11 @@ if st.button("🔄 Actualizar / limpiar pantalla"):
     st.session_state["cliente_edit_id"] = None
     st.session_state["servicio_edit_id"] = None
     
-    # 🔥 Limpiar la caja de búsqueda del cliente
+    # LIMPIAR la caja de búsqueda
     st.session_state["buscar_cliente"] = ""
+
+    # LIMPIAR también la coincidencia seleccionada
+    st.session_state["coincidencia_cliente"] = "-- Cliente nuevo --"
     
     st.rerun()
 
