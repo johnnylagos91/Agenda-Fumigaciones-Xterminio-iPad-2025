@@ -341,27 +341,8 @@ for c in clientes:
     opciones.append(etiqueta)
     mapa_clientes[etiqueta] = c
 
-# 🔎 BUSCADOR DE CLIENTES (autocompletar real)
-st.write("### 🔍 Buscar cliente por nombre")
-
-busqueda = st.text_input("Escribe para buscar clientes...")
-
-# filtrar clientes según lo que escribe
-sugerencias = []
-if busqueda.strip():
-    for c in clientes:
-        etiqueta = c["business_name"] or c["name"]
-        if c["business_name"] and c["name"]:
-            etiqueta = f"{c['business_name']} ({c['name']})"
-        if busqueda.lower() in etiqueta.lower():
-            sugerencias.append(etiqueta)
-
-# seleccionar sugerencia
-seleccion = st.selectbox(
-    "Coincidencias",
-    ["-- Selecciona un cliente --"] + sugerencias
-)
-
+# 🔍 Buscar cliente
+seleccion = st.selectbox("Buscar cliente", opciones)
 cliente_sel = mapa_clientes.get(seleccion)
 
 with st.form("form_servicio_cliente", clear_on_submit=True):
