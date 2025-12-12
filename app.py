@@ -387,9 +387,6 @@ if sugerencias:
 else:
     seleccion = "-- Cliente nuevo --"
     cliente_sel = None
-else:
-    seleccion = "-- Cliente nuevo --"
-    cliente_sel = None
 
 with st.form("form_servicio_cliente", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
