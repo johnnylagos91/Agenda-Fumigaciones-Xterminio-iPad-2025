@@ -1,3 +1,4 @@
+
 import sqlite3
 from datetime import date, timedelta, datetime as dt
 
@@ -326,76 +327,6 @@ dia_hoy = hoy.day
 # =========================
 clientes = get_clients()
 
-# =============================
-#  AUTOCOMPLETADO DE CLIENTES
-# =============================
-
-st.subheader("Buscar cliente existente")
-
-# Caja de texto donde el usuario escribe para buscar
-busqueda = st.text_input("Escribe el nombre del cliente:")
-
-clientes = get_all_clients()   # obtienes todos los clientes de la BD
-nombres = [f"{c['name']} ({c['business_name']})" if c["business_name"] else c["name"] for c in clientes]
-
-# Filtrar sugerencias
-if busqueda.strip():
-    sugerencias = [n for n in nombres if busqueda.lower() in n.lower()]
-else:
-    sugerencias = []
-
-# Mostrar sugerencias
-cliente_seleccionado = None
-
-if sugerencias:
-    cliente_seleccionado = st.selectbox(
-        "Coincidencias encontradas:",
-        options=sugerencias,
-        index=None,
-        placeholder="Selecciona un cliente…"
-    )
-
-# Cuando se elige uno → llenar automáticamente el formulario
-cliente_datos = None
-if cliente_seleccionado:
-    nombre_puro = cliente_seleccionado.split(" (")[0]
-    for c in clientes:
-        if c["name"] == nombre_puro:
-            cliente_datos = c
-            break
-
-
-# =============================
-#  FORMULARIO QUE SE LLENA SOLO
-# =============================
-
-st.subheader("Datos del servicio")
-
-nombre = st.text_input(
-    "Nombre del cliente",
-    value=cliente_datos["name"] if cliente_datos else ""
-)
-
-business = st.text_input(
-    "Negocio",
-    value=cliente_datos["business_name"] if cliente_datos else ""
-)
-
-telefono = st.text_input(
-    "Teléfono",
-    value=cliente_datos["phone"] if cliente_datos else ""
-)
-
-direccion = st.text_input(
-    "Dirección",
-    value=cliente_datos["address"] if cliente_datos else ""
-)
-
-zona = st.text_input(
-    "Zona",
-    value=cliente_datos["zone"] if cliente_datos else ""
-)
-
 # =========================
 # FORMULARIO CLIENTE + SERVICIO
 # =========================
@@ -411,78 +342,27 @@ for c in clientes:
     opciones.append(etiqueta)
     mapa_clientes[etiqueta] = c
 
-# =============================
-#  AUTOCOMPLETADO DE CLIENTES
-# =============================
+# 🔎 BUSCADOR DE CLIENTES (autocompletar real)
+st.write("### 🔍 Buscar cliente por nombre")
 
-st.subheader("Buscar cliente existente")
+busqueda = st.text_input("Escribe para buscar clientes...")
 
-# Caja de texto donde el usuario escribe para buscar
-busqueda = st.text_input("Escribe el nombre del cliente:")
-
-clientes = get_all_clients()   # obtienes todos los clientes de la BD
-nombres = [f"{c['name']} ({c['business_name']})" if c["business_name"] else c["name"] for c in clientes]
-
-# Filtrar sugerencias
+# filtrar clientes según lo que escribe
+sugerencias = []
 if busqueda.strip():
-    sugerencias = [n for n in nombres if busqueda.lower() in n.lower()]
-else:
-    sugerencias = []
-
-# Mostrar sugerencias
-cliente_seleccionado = None
-
-if sugerencias:
-    cliente_seleccionado = st.selectbox(
-        "Coincidencias encontradas:",
-        options=sugerencias,
-        index=None,
-        placeholder="Selecciona un cliente…"
-    )
-
-# Cuando se elige uno → llenar automáticamente el formulario
-cliente_datos = None
-if cliente_seleccionado:
-    nombre_puro = cliente_seleccionado.split(" (")[0]
     for c in clientes:
-        if c["name"] == nombre_puro:
-            cliente_datos = c
-            break
+        etiqueta = c["business_name"] or c["name"]
+        if c["business_name"] and c["name"]:
+            etiqueta = f"{c['business_name']} ({c['name']})"
+        if busqueda.lower() in etiqueta.lower():
+            sugerencias.append(etiqueta)
 
-
-# =============================
-#  FORMULARIO QUE SE LLENA SOLO
-# =============================
-
-st.subheader("Datos del servicio")
-
-nombre = st.text_input(
-    "Nombre del cliente",
-    value=cliente_datos["name"] if cliente_datos else ""
+# seleccionar sugerencia
+seleccion = st.selectbox(
+    "Coincidencias",
+    ["-- Selecciona un cliente --"] + sugerencias
 )
 
-business = st.text_input(
-    "Negocio",
-    value=cliente_datos["business_name"] if cliente_datos else ""
-)
-
-telefono = st.text_input(
-    "Teléfono",
-    value=cliente_datos["phone"] if cliente_datos else ""
-)
-
-direccion = st.text_input(
-    "Dirección",
-    value=cliente_datos["address"] if cliente_datos else ""
-)
-
-zona = st.text_input(
-    "Zona",
-    value=cliente_datos["zone"] if cliente_datos else ""
-)
-
-# 🔍 Buscar cliente
-seleccion = st.selectbox("Buscar cliente", opciones)
 cliente_sel = mapa_clientes.get(seleccion)
 
 with st.form("form_servicio_cliente", clear_on_submit=True):
