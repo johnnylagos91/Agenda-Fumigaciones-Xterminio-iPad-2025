@@ -570,16 +570,18 @@ with st.expander("📅 Servicios agendados", expanded=False):
         col_bs1, col_bs2, col_bs3 = st.columns([2, 2, 1])
 
         with col_bs1:
-            opciones_ids_serv = ["--"] + [str(r["id"]) for r in rows]
-            servicio_id_sel = st.selectbox("Buscar por ID de servicio", opciones_ids_serv)
+    opciones_ids_serv = ["--"] + [str(r["id"]) for r in rows]
+    servicio_id_sel = st.selectbox("Buscar por ID de servicio", opciones_ids_serv)
 
-        with col_bs2:
+with col_bs2:
+    # 👉 Cajita de búsqueda
     buscar_servicio_nombre = st.text_input(
         "Buscar servicio por nombre",
         placeholder="Escribe: Juan, Jardines, Joyería...",
         key="buscar_serv_nombre"
     )
 
+    # 👉 Construcción de lista normal
     opciones_nombres_serv = []
     etiqueta_a_servicio = {}
 
@@ -588,6 +590,7 @@ with st.expander("📅 Servicios agendados", expanded=False):
         opciones_nombres_serv.append(etiqueta)
         etiqueta_a_servicio[etiqueta] = r
 
+    # 👉 Filtro por texto
     if buscar_servicio_nombre.strip():
         opciones_filtradas = [
             o for o in opciones_nombres_serv
@@ -596,15 +599,17 @@ with st.expander("📅 Servicios agendados", expanded=False):
     else:
         opciones_filtradas = opciones_nombres_serv
 
+    # 👉 Selectbox filtrado
     servicio_nombre_sel = st.selectbox(
         "Coincidencias",
         ["--"] + opciones_filtradas,
         key="buscar_servicio_combo"
     )
-        with col_bs3:
-            buscar_servicio_btn = st.button("🔍 Buscar servicio")
 
-        if buscar_servicio_btn:
+with col_bs3:
+    buscar_servicio_btn = st.button("🔍 Buscar servicio")
+
+if buscar_servicio_btn:
             servicio_id = None
 
             # Preferimos búsqueda por ID si se eligió
