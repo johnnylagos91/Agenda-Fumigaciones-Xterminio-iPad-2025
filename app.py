@@ -785,16 +785,38 @@ else:
         cliente_id_sel = st.selectbox("Buscar por ID de cliente", opciones_ids)
 
     with col_c2:
-        opciones_nombres = ["--"]
-        etiqueta_a_cliente = {}
-        for c in clientes_all:
-            etiqueta = c["business_name"] or c["name"]
-            if c["business_name"] and c["name"]:
-                etiqueta = f"{c['business_name']} ({c['name']})"
-            opciones_nombres.append(etiqueta)
-            etiqueta_a_cliente[etiqueta] = c
-        cliente_nombre_sel = st.selectbox("Buscar por nombre / negocio", opciones_nombres)
 
+    # 👉 Nueva cajita para buscar por nombre
+    buscar_cliente_nombre = st.text_input(
+        "Buscar cliente por nombre",
+        placeholder="Escribe: Juan, Jardines, Joyería...",
+        key="buscar_cli_nombre"
+    )
+
+    opciones_nombres = []
+    etiqueta_a_cliente = {}
+
+    for c in clientes_all:
+        etiqueta = c["business_name"] or c["name"]
+        if c["business_name"] and c["name"]:
+            etiqueta = f"{c['business_name']} ({c['name']})"
+        opciones_nombres.append(etiqueta)
+        etiqueta_a_cliente[etiqueta] = c
+
+    # 👉 Filtrar si se escribió texto
+    if buscar_cliente_nombre.strip():
+        opciones_filtradas = [
+            o for o in opciones_nombres
+            if o.lower().startswith(buscar_cliente_nombre.lower())
+        ]
+    else:
+        opciones_filtradas = opciones_nombres
+
+    cliente_nombre_sel = st.selectbox(
+        "Coincidencias",
+        ["--"] + opciones_filtradas,
+        key="buscar_cliente_combo"
+    )
     with col_c3:
         buscar_cliente_btn = st.button("🔍 Buscar cliente")
 
