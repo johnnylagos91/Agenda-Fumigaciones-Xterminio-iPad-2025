@@ -318,7 +318,7 @@ if st.button("🔄 Actualizar / limpiar pantalla"):
     st.session_state["servicio_edit_id"] = None
     
     # 🔥 Limpiar la caja de búsqueda del cliente
-    st.session_state["buscar_cliente"] = None
+    st.session_state["buscar_cliente"] = ""
     
     st.rerun()
 
