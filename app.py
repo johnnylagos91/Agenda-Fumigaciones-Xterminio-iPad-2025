@@ -267,52 +267,7 @@ init_db()
 st.set_page_config(page_title="Agenda FX 2025", layout="wide")
 st.title("📅 Agenda Fumigaciones Xterminio")
 
-st.markdown("### 🔍 Buscar cliente")
 
-# Caja donde el usuario escribe
-search_text = st.text_input("Escribe el nombre del cliente:")
-
-# Obtener todos los clientes desde tu base de datos
-# Ajusta esta función según tu código actual
-clients = get_all_clients()
-
-# Convertimos a una lista de nombres
-client_names = [c["business_name"] if c["business_name"] else c["name"] for c in clients]
-
-# Si hay texto escrito, filtramos
-matches = []
-if search_text:
-    matches = [name for name in client_names if search_text.lower() in name.lower()]
-
-# Si hay coincidencias, mostramos sugerencias
-selected_client_name = None
-if matches:
-    selected_client_name = st.selectbox(
-        "Coincidencias encontradas:",
-        matches,
-        key="match_selector"
-    )
-
-# Si el usuario selecciona un cliente, buscamos sus datos
-selected_client = None
-if selected_client_name:
-    for c in clients:
-        name_display = c["business_name"] if c["business_name"] else c["name"]
-        if name_display == selected_client_name:
-            selected_client = c
-            break
-
-# Si encontramos el cliente, llenamos automáticamente su información
-if selected_client:
-    st.success(f"Cliente seleccionado: {selected_client_name}")
-
-    # Llenado automático (puedes sustituir estos campos por los de tu formulario)
-    name = st.text_input("Nombre:", selected_client["name"])
-    business_name = st.text_input("Negocio:", selected_client["business_name"])
-    address = st.text_input("Dirección:", selected_client["address"])
-    zone = st.text_input("Zona:", selected_client["zone"])
-    phone = st.text_input("Teléfono:", selected_client["phone"])
-    notes = st.text_area("Notas:", selected_client["notes"])
 
 # ==== CSS PERSONALIZADO PARA EL SELECTBOX ====
 st.markdown("""
