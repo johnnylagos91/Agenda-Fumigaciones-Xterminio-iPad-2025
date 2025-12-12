@@ -376,7 +376,7 @@ else:
     opciones = ["-- Cliente nuevo --"] + opciones_completas
 
 # Selectbox final (ya filtrado)
-seleccion = st.selectbox("Coincidencias", opciones)
+seleccion = st.selectbox("Coincidencias", opciones, key="coincidencia_cliente")
 cliente_sel = mapa_clientes.get(seleccion)
 
 with st.form("form_servicio_cliente", clear_on_submit=True):
