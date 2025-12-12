@@ -351,7 +351,8 @@ for c in clientes:
 
 texto_busqueda = st.text_input(
     "Buscar cliente",
-    placeholder="Escribe el nombre: Juan, Jardines, Joyería..."
+    placeholder="Escribe el nombre: Juan, Jardines, Joyería...",
+    key="buscar_cliente"
 )
 
 # Construcción de lista normal
