@@ -574,38 +574,13 @@ with st.expander("📅 Servicios agendados", expanded=False):
             servicio_id_sel = st.selectbox("Buscar por ID de servicio", opciones_ids_serv)
 
         with col_bs2:
-
-    # 👉 Cajita nueva para escribir y filtrar por nombre
-    buscar_servicio_nombre = st.text_input(
-        "Buscar servicio por nombre",
-        placeholder="Escribe: Juan, Jardines, Joyería...",
-        key="buscar_serv_nombre"
-    )
-
-    # 👉 Construir lista normal
-    opciones_nombres_serv = []
-    etiqueta_a_servicio = {}
-
-    for r in rows:
-        etiqueta = f"{r['client_name']} ({r['date']} {r['time']})"
-        opciones_nombres_serv.append(etiqueta)
-        etiqueta_a_servicio[etiqueta] = r
-
-    # 👉 Si escribes algo → filtra por inicio del texto
-    if buscar_servicio_nombre.strip():
-        opciones_filtradas = [
-            o for o in opciones_nombres_serv
-            if o.lower().startswith(buscar_servicio_nombre.lower())
-        ]
-    else:
-        opciones_filtradas = opciones_nombres_serv
-
-    # 👉 Selectbox final
-    servicio_nombre_sel = st.selectbox(
-        "Coincidencias",
-        ["--"] + opciones_filtradas,
-        key="buscar_servicio_combo"
-    )
+            opciones_nombres_serv = ["--"]
+            etiqueta_a_servicio = {}
+            for r in rows:
+                etiqueta = f"{r['client_name']} ({r['date']} {r['time']})"
+                opciones_nombres_serv.append(etiqueta)
+                etiqueta_a_servicio[etiqueta] = r
+            servicio_nombre_sel = st.selectbox("Buscar por cliente / negocio", opciones_nombres_serv)
 
         with col_bs3:
             buscar_servicio_btn = st.button("🔍 Buscar servicio")
@@ -785,38 +760,16 @@ else:
         cliente_id_sel = st.selectbox("Buscar por ID de cliente", opciones_ids)
 
     with col_c2:
+        opciones_nombres = ["--"]
+        etiqueta_a_cliente = {}
+        for c in clientes_all:
+            etiqueta = c["business_name"] or c["name"]
+            if c["business_name"] and c["name"]:
+                etiqueta = f"{c['business_name']} ({c['name']})"
+            opciones_nombres.append(etiqueta)
+            etiqueta_a_cliente[etiqueta] = c
+        cliente_nombre_sel = st.selectbox("Buscar por nombre / negocio", opciones_nombres)
 
-    # 👉 Nueva cajita para buscar por nombre
-    buscar_cliente_nombre = st.text_input(
-        "Buscar cliente por nombre",
-        placeholder="Escribe: Juan, Jardines, Joyería...",
-        key="buscar_cli_nombre"
-    )
-
-    opciones_nombres = []
-    etiqueta_a_cliente = {}
-
-    for c in clientes_all:
-        etiqueta = c["business_name"] or c["name"]
-        if c["business_name"] and c["name"]:
-            etiqueta = f"{c['business_name']} ({c['name']})"
-        opciones_nombres.append(etiqueta)
-        etiqueta_a_cliente[etiqueta] = c
-
-    # 👉 Filtrar si se escribió texto
-    if buscar_cliente_nombre.strip():
-        opciones_filtradas = [
-            o for o in opciones_nombres
-            if o.lower().startswith(buscar_cliente_nombre.lower())
-        ]
-    else:
-        opciones_filtradas = opciones_nombres
-
-    cliente_nombre_sel = st.selectbox(
-        "Coincidencias",
-        ["--"] + opciones_filtradas,
-        key="buscar_cliente_combo"
-    )
     with col_c3:
         buscar_cliente_btn = st.button("🔍 Buscar cliente")
 
