@@ -390,9 +390,6 @@ if "cliente_seleccionado" in st.session_state:
 else:
     cliente_sel = None
 
-   seleccion = "-- Cliente nuevo --"
-    cliente_sel = None
-
 with st.form("form_servicio_cliente", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
 
