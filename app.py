@@ -341,9 +341,51 @@ for c in clientes:
     opciones.append(etiqueta)
     mapa_clientes[etiqueta] = c
 
-# 🔍 Buscar cliente
-seleccion = st.selectbox("Buscar cliente", opciones)
-cliente_sel = mapa_clientes.get(seleccion)
+# =========================
+# BUSCADOR DE CLIENTES (AUTOCOMPLETADO)
+# =========================
+
+st.markdown("### 🔍 Buscar cliente")
+
+# Convertir lista de clientes a lista de nombres
+lista_nombres = []
+mapa_busqueda = {}
+
+for c in clientes:
+    etiqueta = c["business_name"] or c["name"]
+    if c["business_name"] and c["name"]:
+        etiqueta = f"{c['business_name']} ({c['name']})"
+    lista_nombres.append(etiqueta)
+    mapa_busqueda[etiqueta] = c
+
+# Caja de texto para escribir
+texto_busqueda = st.text_input(
+    "Escribe el nombre o negocio",
+    placeholder="Ej: Oxxo, Juan Pérez, Ferretería López…"
+)
+
+# Mostrar sugerencias dinámicas
+sugerencias = []
+if texto_busqueda.strip():
+    sugerencias = [
+        nombre for nombre in lista_nombres 
+        if texto_busqueda.lower() in nombre.lower()
+    ]
+
+# Selector SOLO si hay sugerencias
+cliente_sel = None
+if sugerencias:
+    seleccion = st.selectbox(
+        "Coincidencias encontradas",
+        opciones := ["-- Selecciona cliente --"] + sugerencias,
+        key="selector_autocomplete"
+    )
+
+    if seleccion != "-- Selecciona cliente --":
+        cliente_sel = mapa_busqueda.get(seleccion)
+else:
+    seleccion = "-- Cliente nuevo --"
+    cliente_sel = None
 
 with st.form("form_servicio_cliente", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
