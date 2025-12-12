@@ -315,9 +315,9 @@ if "servicio_edit_id" not in st.session_state:
 # 🔄 Botón para limpiar todo y recargar
 if st.button("🔄 Actualizar / limpiar pantalla"):
     st.session_state["cliente_edit_id"] = None
-st.session_state["servicio_edit_id"] = None
-st.session_state["Buscar cliente"] = ""
-st.rerun()
+    st.session_state["servicio_edit_id"] = None
+    st.session_state["Buscar cliente"] = ""
+    st.rerun()
 
 hoy = date.today()
 dia_hoy = hoy.day
