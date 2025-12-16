@@ -768,33 +768,7 @@ else:
                 etiqueta = f"{c['business_name']} ({c['name']})"
             opciones_nombres.append(etiqueta)
             etiqueta_a_cliente[etiqueta] = c
-# 🔎 Buscador adicional por nombre del cliente (autocompletado)
-texto_buscar_cliente = st.text_input(
-    "Buscar cliente por nombre",
-    placeholder="Escribe aquí para filtrar clientes...",
-    key="buscar_cliente_edit"
-)
-
-# Generar lista normal completa
-opciones_nombres_completas = []
-mapa_nombres_clientes = {}
-
-for c in clientes_all:
-    etiqueta = c["business_name"] or c["name"]
-    if c["business_name"] and c["name"]:
-        etiqueta = f"{c['business_name']} ({c['name']})"
-    opciones_nombres_completas.append(etiqueta)
-    mapa_nombres_clientes[etiqueta] = c
-
-# Filtrar si escribió algo
-if texto_buscar_cliente.strip():
-    opciones_nombres = ["--"] + [
-        o for o in opciones_nombres_completas
-        if o.lower().startswith(texto_buscar_cliente.lower())
-    ]
-else:
-    opciones_nombres = ["--"] + opciones_nombres_completas
-    cliente_nombre_sel = st.selectbox("Buscar por nombre / negocio", opciones_nombres)
+        cliente_nombre_sel = st.selectbox("Buscar por nombre / negocio", opciones_nombres)
 
     with col_c3:
         buscar_cliente_btn = st.button("🔍 Buscar cliente")
