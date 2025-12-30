@@ -548,8 +548,8 @@ with st.expander("📅 Servicios agendados", expanded=False):
         st.write("")  # espacio
         st.write("")
 
-    date_from = None
-    date_to = None
+    date_from = str(lunes_semana)
+    date_to = str(domingo_semana)
 
     if filtro_rango == "Hoy":
         date_from = str(hoy)
