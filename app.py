@@ -508,21 +508,21 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
 # =========================
 # SERVICIOS AGENDADOS (EN EXPANDER)
 # =========================
-st.markdown("#### 📆 Seleccionar semana")
+        st.markdown("#### 📆 Seleccionar semana")
 
-fecha_semana = st.date_input(
-    "Elige cualquier día de la semana",
-    value=hoy,
-    key="fecha_semana_manual"
-)
+        fecha_semana = st.date_input(
+          "Elige cualquier día de la semana",
+          value=hoy,
+          key="fecha_semana_manual"
+        )
 
-lunes_semana = fecha_semana - timedelta(days=fecha_semana.weekday())
-domingo_semana = lunes_semana + timedelta(days=6)
+        lunes_semana = fecha_semana - timedelta(days=fecha_semana.weekday())
+        domingo_semana = lunes_semana + timedelta(days=6)
 
-st.info(
-    f"Mostrando servicios del **{lunes_semana.strftime('%d/%m/%Y')}** "
-    f"al **{domingo_semana.strftime('%d/%m/%Y')}**"
-)
+        st.info(
+          f"Mostrando servicios del **{lunes_semana.strftime('%d/%m/%Y')}** "
+          f"al **{domingo_semana.strftime('%d/%m/%Y')}**"
+        )
 
 with st.expander("📅 Servicios agendados", expanded=False):
     col_f1, col_f2, col_f3 = st.columns(3)
