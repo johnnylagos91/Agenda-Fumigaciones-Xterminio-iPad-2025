@@ -511,14 +511,14 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
 with st.expander("📅 Servicios agendados", expanded=False):
 
     # 🔄 BOTÓN ACTUALIZAR (SEMANA ACTUAL)
-     if "forzar_semana_actual" not in st.session_state:
-     st.session_state["forzar_semana_actual"] = False
+    if "forzar_semana_actual" not in st.session_state:
+        st.session_state["forzar_semana_actual"] = False
 
-     if st.button("🔄 Actualizar (semana actual)"):
-     st.session_state["forzar_semana_actual"] = True
-     st.rerun()
-     st.session_state["forzar_semana_actual"] = False
-     st.markdown("#### 📆 Seleccionar semana")
+    if st.button("🔄 Actualizar (semana actual)"):
+        st.session_state["forzar_semana_actual"] = True
+        st.rerun()
+
+    st.markdown("#### 📆 Seleccionar semana")
 
     fecha_semana = st.date_input(
         "Elige cualquier día de la semana",
