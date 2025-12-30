@@ -879,16 +879,40 @@ else:
 # =========================
 st.markdown("### 📦 Importar / Exportar base de datos")
 
-col_imp, col_exp = st.columns(2)
+col_imp, col_exp, col_xls = st.columns(3)
 
-# --- EXPORTAR BD ---
+# --- EXPORTAR BD (.db) ---
 with col_exp:
     with open(DB_NAME, "rb") as f:
         st.download_button(
-            label="⬇️ Exportar base de datos",
+            label="⬇️ Exportar BD (.db)",
             data=f,
-            file_name="agenda_exportada.db",
+            file_name="agenda_respaldo.db",
             mime="application/octet-stream",
+        )
+
+# --- EXPORTAR A EXCEL (.xlsx) ---
+with col_xls:
+    if st.button("📊 Exportar a Excel"):
+        conn = get_conn()
+
+        df_clients = pd.read_sql("SELECT * FROM clients", conn)
+        df_appointments = pd.read_sql("SELECT * FROM appointments", conn)
+
+        conn.close()
+
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine="openpyxl") as writer:
+            df_clients.to_excel(writer, sheet_name="Clientes", index=False)
+            df_appointments.to_excel(writer, sheet_name="Servicios", index=False)
+
+        output.seek(0)
+
+        st.download_button(
+            label="📥 Descargar Excel",
+            data=output,
+            file_name="agenda_excel.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
 
 # --- IMPORTAR BD ---
@@ -900,7 +924,6 @@ with col_imp:
     )
 
     if archivo_subido:
-        # Reemplazar archivo existente
         with open(DB_NAME, "wb") as f:
             f.write(archivo_subido.read())
         st.success("✅ Base de datos importada correctamente. Recargando...")
