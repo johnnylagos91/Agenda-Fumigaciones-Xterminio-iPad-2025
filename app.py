@@ -509,6 +509,14 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
 # SERVICIOS AGENDADOS (EN EXPANDER)
 # =========================
 with st.expander("📅 Servicios agendados", expanded=False):
+
+    # 🔄 BOTÓN ACTUALIZAR (SEMANA ACTUAL)
+if "forzar_semana_actual" not in st.session_state:
+    st.session_state["forzar_semana_actual"] = False
+
+if st.button("🔄 Actualizar (semana actual)"):
+    st.session_state["forzar_semana_actual"] = True
+    st.rerun()
     
     st.markdown("#### 📆 Seleccionar semana")
 
@@ -548,18 +556,32 @@ with st.expander("📅 Servicios agendados", expanded=False):
         st.write("")  # espacio
         st.write("")
 
+    # 📅 FECHAS SEGÚN BOTÓN Y FILTROS
+
+if st.session_state.get("forzar_semana_actual"):
+    # 🔄 Presionaste ACTUALIZAR
+    lunes_actual = hoy - timedelta(days=hoy.weekday())
+    domingo_actual = lunes_actual + timedelta(days=6)
+
+    date_from = str(lunes_actual)
+    date_to = str(domingo_actual)
+
+elif filtro_rango == "Hoy":
+    date_from = str(hoy)
+    date_to = str(hoy)
+
+elif filtro_rango == "Próximos 7 días":
+    date_from = str(hoy)
+    date_to = str(hoy + timedelta(days=7))
+
+elif filtro_rango == "Todos":
+    date_from = None
+    date_to = None
+
+else:
+    # 📆 Semana manual
     date_from = str(lunes_semana)
     date_to = str(domingo_semana)
-
-    if filtro_rango == "Hoy":
-        date_from = str(hoy)
-        date_to = str(hoy)
-    elif filtro_rango == "Próximos 7 días":
-        date_from = str(hoy)
-        date_to = str(hoy + timedelta(days=7))
-        
-        date_from = str(lunes_semana)
-        date_to = str(domingo_semana)
 
     rows = get_appointments(date_from=date_from, date_to=date_to, status=filtro_estado)
 
