@@ -510,7 +510,7 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
 # =========================
 st.markdown("#### 📆 Seleccionar semana")
 
-    fecha_semana = st.date_input(
+fecha_semana = st.date_input(
     "Elige cualquier día de la semana",
     value=hoy,
     key="fecha_semana_manual"
