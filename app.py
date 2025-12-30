@@ -516,8 +516,8 @@ fecha_semana = st.date_input(
     key="fecha_semana_manual"
 )
 
-    lunes_semana = fecha_semana - timedelta(days=fecha_semana.weekday())
-    domingo_semana = lunes_semana + timedelta(days=6)
+lunes_semana = fecha_semana - timedelta(days=fecha_semana.weekday())
+domingo_semana = lunes_semana + timedelta(days=6)
 
 st.info(
     f"Mostrando servicios del **{lunes_semana.strftime('%d/%m/%Y')}** "
