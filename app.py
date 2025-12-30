@@ -511,6 +511,22 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
 with st.expander("📅 Servicios agendados", expanded=False):
     col_f1, col_f2, col_f3 = st.columns(3)
 
+    st.markdown("#### 📆 Seleccionar semana")
+
+fecha_semana = st.date_input(
+    "Elige cualquier día de la semana",
+    value=hoy,
+    key="fecha_semana_manual"
+)
+
+lunes_semana = fecha_semana - timedelta(days=fecha_semana.weekday())
+domingo_semana = lunes_semana + timedelta(days=6)
+
+st.info(
+    f"Mostrando servicios del **{lunes_semana.strftime('%d/%m/%Y')}** "
+    f"al **{domingo_semana.strftime('%d/%m/%Y')}**"
+)
+
     with col_f1:
         filtro_rango = st.selectbox(
             "Rango de fechas",
@@ -540,6 +556,9 @@ with st.expander("📅 Servicios agendados", expanded=False):
     elif filtro_rango == "Próximos 7 días":
         date_from = str(hoy)
         date_to = str(hoy + timedelta(days=7))
+        
+        date_from = str(lunes_semana)
+        date_to = str(domingo_semana)
 
     rows = get_appointments(date_from=date_from, date_to=date_to, status=filtro_estado)
 
