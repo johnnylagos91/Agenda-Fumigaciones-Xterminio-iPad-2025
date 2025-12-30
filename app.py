@@ -508,6 +508,8 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
 # =========================
 # SERVICIOS AGENDADOS (EN EXPANDER)
 # =========================
+with st.expander("📅 Servicios agendados", expanded=False):
+    
     st.markdown("#### 📆 Seleccionar semana")
 
     fecha_semana = st.date_input(
@@ -523,10 +525,7 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
         f"Mostrando servicios del **{lunes_semana.strftime('%d/%m/%Y')}** "
         f"al **{domingo_semana.strftime('%d/%m/%Y')}**"
     )
-
-    # 👇 aquí sigue el resto de tu código de servicios
-
-with st.expander("📅 Servicios agendados", expanded=False):
+    
     col_f1, col_f2, col_f3 = st.columns(3)
 
     with col_f1:
