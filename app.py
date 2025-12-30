@@ -509,7 +509,6 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
 # SERVICIOS AGENDADOS (EN EXPANDER)
 # =========================
 with st.expander("📅 Servicios agendados", expanded=False):
-    col_f1, col_f2, col_f3 = st.columns(3)
 
 st.markdown("#### 📆 Seleccionar semana")
 
@@ -526,6 +525,8 @@ st.info(
     f"Mostrando servicios del **{lunes_semana.strftime('%d/%m/%Y')}** "
     f"al **{domingo_semana.strftime('%d/%m/%Y')}**"
 )
+
+    col_f1, col_f2, col_f3 = st.columns(3)
 
     with col_f1:
         filtro_rango = st.selectbox(
