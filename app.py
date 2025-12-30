@@ -509,41 +509,77 @@ with st.expander("📌 Servicios marcados como mensuales", expanded=False):
 # SERVICIOS AGENDADOS (EN EXPANDER)
 # =========================
 with st.expander("📅 Servicios agendados", expanded=False):
+    
+    st.markdown("#### 📆 Seleccionar semana")
 
-    hoy = date.today()
-    lunes_semana = hoy - timedelta(days=hoy.weekday())
+    fecha_semana = st.date_input(
+        "Elige cualquier día de la semana",
+        value=hoy,
+        key="fecha_semana_manual"
+    )
 
-    if st.button("🔄 Actualizar (mostrar desde lunes de esta semana)"):
-        pass  # Streamlit se vuelve a ejecutar solo
+    lunes_semana = fecha_semana - timedelta(days=fecha_semana.weekday())
+    domingo_semana = lunes_semana + timedelta(days=6)
 
     st.info(
         f"Mostrando servicios del **{lunes_semana.strftime('%d/%m/%Y')}** "
-        f"al **{hoy.strftime('%d/%m/%Y')}**"
+        f"al **{domingo_semana.strftime('%d/%m/%Y')}**"
     )
+    
+    col_f1, col_f2, col_f3 = st.columns(3)
 
-    rows = get_appointments(
-        date_from=str(lunes_semana),
-        date_to=str(hoy),
-        status=None
-    )
+    with col_f1:
+        filtro_rango = st.selectbox(
+            "Rango de fechas",
+            ["Hoy", "Próximos 7 días", "Todos"],
+            index=1,
+            key="filtro_rango_serv",
+        )
+
+    with col_f2:
+        filtro_estado = st.selectbox(
+            "Estado",
+            ["Todos", "Pendiente", "Confirmado", "Realizado", "Cobrado"],
+            index=0,
+            key="filtro_estado_serv",
+        )
+
+    with col_f3:
+        st.write("")  # espacio
+        st.write("")
+
+    date_from = str(lunes_semana)
+    date_to = str(domingo_semana)
+
+    if filtro_rango == "Hoy":
+        date_from = str(hoy)
+        date_to = str(hoy)
+    elif filtro_rango == "Próximos 7 días":
+        date_from = str(hoy)
+        date_to = str(hoy + timedelta(days=7))
+        
+        date_from = str(lunes_semana)
+        date_to = str(domingo_semana)
+
+    rows = get_appointments(date_from=date_from, date_to=date_to, status=filtro_estado)
 
     if not rows:
-        st.warning("No hay servicios en este rango.")
+        st.info("No hay servicios con los filtros seleccionados.")
     else:
         data = [
             {
                 "ID": r["id"],
-                "Fecha": r["date"],
-                "Hora": r["time"],
-                "Cliente / Negocio": r["client_name"],
-                "Tipo servicio": r["service_type"],
-                "Plaga": r["pest_type"],
-                "Zona": r["zone"],
-                "Dirección": r["address"],
-                "Teléfono": r["phone"],
-                "Precio": r["price"],
-                "Estado": r["status"],
-                "Notas": r["notes"],
+        "Fecha": r["date"],
+        "Hora": r["time"],
+        "Cliente/Negocio": r["client_name"],
+        "Tipo servicio": r["service_type"],
+        "Plaga": r["pest_type"],
+        "Zona": r["zone"],
+        "Dirección": r["address"],
+        "Teléfono": r["phone"],
+        "Precio": r["price"],
+        "Estado": r["status"],
+        "Notas": r["notes"],
             }
             for r in rows
         ]
